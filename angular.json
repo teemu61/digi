@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "digi"
+    }
+  },
+  "defaultProject": "digi",
+  "cli": {
+    "analytics": "b6a4877c-ea98-4a8d-ac71-36c48b3cfc4a"
+  }
 }
