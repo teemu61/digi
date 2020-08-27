@@ -8,7 +8,13 @@ import { DataSource } from '@angular/cdk/collections';
 import { map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 
-
+export interface Element {
+  operatorShortCode: string;
+  operatorUICCode: number;
+  trainNumber: number;
+  trainType: string;
+  version: number;
+}
 
 @Component({
   selector: 'app-summary',
@@ -20,6 +26,7 @@ export class SummaryComponent implements OnInit {
     dataSource = new MatTableDataSource([]);
     displayedColumns: string[] = ["trainNumber","operatorUICCode", "operatorShortCode", "trainType"];
     trains: Train[] = [];
+    elements: Element[] = [];
   
     constructor(
       public trainService: TrainService,
@@ -27,12 +34,9 @@ export class SummaryComponent implements OnInit {
       }
 
     ngOnInit(): void {
-
       this.trainService.getTrains().subscribe(
         trains => this.dataSource.data = trains
       );
-
-
     }
 
     searchTrains(search = '') {
