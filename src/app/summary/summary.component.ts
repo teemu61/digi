@@ -9,6 +9,7 @@ import { map, filter } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { getTranslationDeclStmts } from '@angular/compiler/src/render3/view/template';
 import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 export interface Element {
   operatorShortCode: string;
@@ -28,6 +29,7 @@ export class SummaryComponent implements OnInit, AfterViewInit{
     displayedColumns: string[] = ["trainNumber","operatorUICCode", "operatorShortCode", "trainType"];
     trains: Train[] = [];
     @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator) paginator; MatPaginator;
 
     constructor(
       public trainService: TrainService,
@@ -58,6 +60,7 @@ export class SummaryComponent implements OnInit, AfterViewInit{
 
     ngAfterViewInit(): void {
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     }
 
   }
