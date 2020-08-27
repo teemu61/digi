@@ -21,14 +21,14 @@ export class TrainService {
     return body || { };
   }
 
-  getTrains(): Observable<Train> {
+  getTrains(): Observable<any> {
     return this.http.get(BASE_URL + 'live-trains' ).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );
   }
 
-  getTrainById(id: string): Observable<Train> {
+  getTrainById(id: string): Observable<any> {
     return this.http.get(BASE_URL + 'trains/' + id).pipe(
       map(this.extractData),
       catchError(this.handleError)
