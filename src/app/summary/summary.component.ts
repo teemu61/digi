@@ -1,14 +1,14 @@
 import { Train } from './../model/Train';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TrainService } from '../train-service';
-import { Train } from '../model/Train';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DataSource } from '@angular/cdk/collections';
 import { map, filter } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { getTranslationDeclStmts } from '@angular/compiler/src/render3/view/template';
+import { MatSort } from '@angular/material/sort';
 
 export interface Element {
   operatorShortCode: string;
@@ -22,11 +22,12 @@ export interface Element {
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.css']
 })
-export class SummaryComponent implements OnInit {
+export class SummaryComponent implements OnInit, AfterViewInit{
 
     dataSource = new MatTableDataSource([]);
     displayedColumns: string[] = ["trainNumber","operatorUICCode", "operatorShortCode", "trainType"];
     trains: Train[] = [];
+    @ViewChild(MatSort) sort: MatSort;
 
     constructor(
       public trainService: TrainService,
@@ -54,4 +55,9 @@ export class SummaryComponent implements OnInit {
     searchTrains(search = '') {
         this.dataSource.filter = search.toLocaleLowerCase().trim();
     }
+
+    ngAfterViewInit(): void {
+      this.dataSource.sort = this.sort;
+    }
+
   }

@@ -8,26 +8,26 @@
 </mat-form-field>
 
 <div class="summary-table">
-  <mat-table [dataSource]="dataSource">
+  <mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="trainNumber">
-      <mat-header-cell *matHeaderCellDef>Train Number</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Train Number</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <a href="" [routerLink]="['/train-details/' +element.trainNumber ]"> {{element.trainNumber}} </a>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="operatorUICCode">
-      <mat-header-cell *matHeaderCellDef>operatorUICCode</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>operatorUICCode</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.operatorUICCode}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="operatorShortCode">
-      <mat-header-cell *matHeaderCellDef>operatorShortCode</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>operatorShortCode</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.operatorShortCode}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="trainType">
-        <mat-header-cell *matHeaderCellDef>trainType</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>trainType</mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.trainType}} </mat-cell>
       </ng-container>
 
