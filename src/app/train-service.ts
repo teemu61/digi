@@ -22,14 +22,16 @@ export class TrainService {
   }
 
   getTrains(): Observable<any> {
-    return this.http.get(BASE_URL + 'live-trains' ).pipe(
+    let url = BASE_URL + 'live-trains'
+    return this.http.get(url).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );
   }
 
   getTrainById(id: string): Observable<any> {
-    return this.http.get(BASE_URL + 'trains/' + id).pipe(
+    let url = BASE_URL +'trains/latest/' + id;
+    return this.http.get(url).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );

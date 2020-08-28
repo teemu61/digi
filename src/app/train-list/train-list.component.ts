@@ -1,4 +1,4 @@
-import { Train } from './../model/Train';
+import { Train } from '../model/Train';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TrainService } from '../train-service';
@@ -19,17 +19,17 @@ export interface Element {
 }
 
 @Component({
-  selector: 'app-summary',
-  templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.css']
+  selector: 'app-train-list',
+  templateUrl: './train-list.component.html',
+  styleUrls: ['./train-list.component.css']
 })
-export class SummaryComponent implements OnInit, AfterViewInit{
+export class TrainListComponent implements OnInit, AfterViewInit{
 
     dataSource = new MatTableDataSource([]);
     displayedColumns: string[] = ["trainNumber","operatorUICCode", "operatorShortCode", "trainType"];
     trains: Train[] = [];
     @ViewChild(MatSort) sort: MatSort;
-    @ViewChild(MatPaginator) paginator; MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     constructor(
       public trainService: TrainService,
@@ -51,6 +51,7 @@ export class SummaryComponent implements OnInit, AfterViewInit{
         })))
         .subscribe(i => {
         this.dataSource.data = i;
+        console.log("HUU this.dataSource: ",i)
       })
     }
 
