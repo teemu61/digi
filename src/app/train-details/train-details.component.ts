@@ -1,22 +1,28 @@
 import { DataSource } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { Train } from '../model/Train';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TrainService } from '../service/train-service';
 import { TimeTableRow } from '../model/TimeTableRow';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { map, flatMap, tap } from 'rxjs/operators';
+import { map, flatMap, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { toBase64String } from '@angular/compiler/src/output/source_map';
+import { fromEvent } from 'rxjs';
 
 export interface Element {
+  cancelled: boolean;
+  deleted: boolean;
+  departureDate: string;
   operatorShortCode: string;
   operatorUICCode: number;
+  runningCurrently: boolean;
+  timetableType: string;
+  trainCategory: string;
   trainNumber: number;
   trainType: string;
 }
-
 
 @Component({
   selector: 'app-train-details',
@@ -29,7 +35,7 @@ export class TrainDetailsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource([]);
   displayedColumns: string[] = ["key","value"];
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('input') input: ElementRef;
 
   constructor(
     public trainService: TrainService, 
@@ -37,34 +43,62 @@ export class TrainDetailsComponent implements OnInit, AfterViewInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.trainService.getTrainById(this.route.snapshot.params.id).pipe(
-      map(train => {
-        let element: Element = { 
-          operatorShortCode: train.operatorShortCode,
-          operatorUICCode: train.operatorUICCode,
-          trainNumber: train.trainNumber,
-          trainType: train.trainType
-        }
-        return element;
-      }))
-      .subscribe(i => {
-
-      console.log("toinen i: ",i)
-      for (const property in i) {
-        let key = `${property}`;
-        let value = `${i[property]}`;
-        let item = {key, value};
-        this.dataSource.data.push(item);
-      }
-      console.log("this.dataSource.data: ", this.dataSource.data)
-      this.dataSource.sort = this.sort;
-    }) 
-
+    this.loadTrain("");
   }
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+
+    fromEvent(this.input.nativeElement,'keyup')
+    .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap(() => {
+            this.loadTrain(this.input.nativeElement.value);
+        })
+    )
+    .subscribe();
   }
+
+  loadTrain(trainNumber: string) {
+  console.log("loadTrain called ", trainNumber)
+
+  let id = (trainNumber == "") ? this.route.snapshot.params.id : trainNumber; 
+
+  this.trainService.getTrainById(id).pipe(
+    map(train => this.trainToElement(train))
+    )
+    .subscribe(i => {
+      let data = [];
+      for (const property in i) {
+        let key = `${property}`;
+        let value = `${i[property]}`;
+        let item = {key, value};
+        data.push(item);
+      }
+      this.dataSource.data = data;
+      console.log("this.dataSource.data: ", this.dataSource.data)
+      this.dataSource.sort = this.sort;
+  }) 
+}
+
+
+  trainToElement(train:Train) {
+    let element: Element = { 
+      operatorShortCode: train.operatorShortCode,
+      operatorUICCode: train.operatorUICCode,
+      trainNumber: train.trainNumber,
+      trainType: train.trainType,
+      cancelled: train.cancelled,
+      deleted: train.deleted,
+      departureDate: train.departureDate,
+      runningCurrently: train.runningCurrently,
+      timetableType: train.timetableType,
+      trainCategory: train.trainCategory
+    }
+    console.log("element: ", element);
+    return element;
+  }
+
 }
 

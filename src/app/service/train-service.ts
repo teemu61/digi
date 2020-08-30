@@ -33,6 +33,7 @@ export class TrainService {
 
   getTrainById(id: string): Observable<any> {
     let url = BASE_URL +'trains/latest/' + id;
+    console.log("url: ",url)
     let ret = this.http.get(url).pipe(
       flatMap(this.extractData),
       catchError(this.handleError)

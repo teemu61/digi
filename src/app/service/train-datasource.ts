@@ -14,7 +14,7 @@ export class TrainDataSource implements DataSource<Train> {
 
     constructor(private trainService: TrainService) {}
 
-    loadLessons(id:string) {
+    loadTrain(id:string) {
 
         this.loadingSubject.next(true);
 
@@ -34,5 +34,7 @@ export class TrainDataSource implements DataSource<Train> {
         this.trainSubject.complete();
         this.loadingSubject.complete();
     }
+
+
 
 }

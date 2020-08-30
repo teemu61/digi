@@ -2,8 +2,12 @@
 <div class="summary">
 
     <h2>Trains Details</h2>
+
     
-    
+    <mat-form-field>
+      <input matInput placeholder="Search train" #input>
+    </mat-form-field>
+
     <div class="summary-table">
       <mat-table [dataSource]="dataSource" matSort>
     
@@ -21,10 +25,6 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
-    
-      
-      <mat-paginator [pageSize]="5" [pageSizeOptions]="[3,5,10]">
-      </mat-paginator>
     
     
     </div>
