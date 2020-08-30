@@ -53,38 +53,32 @@ export class TrainDetailsComponent implements OnInit, AfterViewInit {
     .pipe(
         debounceTime(150),
         distinctUntilChanged(),
-        tap(() => {
-            this.loadTrain(this.input.nativeElement.value);
-        })
-    )
-    .subscribe();
+        tap(() => this.loadTrain(this.input.nativeElement.value))
+     ).subscribe();
   }
 
   loadTrain(trainNumber: string) {
-  console.log("loadTrain called ", trainNumber)
 
   let id = (trainNumber == "") ? this.route.snapshot.params.id : trainNumber; 
-
   this.trainService.getTrainById(id).pipe(
     map(train => this.trainToElement(train))
-    )
-    .subscribe(i => {
-      let data = [];
-      for (const property in i) {
-        let key = `${property}`;
-        let value = `${i[property]}`;
-        let item = {key, value};
-        data.push(item);
-      }
-      this.dataSource.data = data;
-      console.log("this.dataSource.data: ", this.dataSource.data)
-      this.dataSource.sort = this.sort;
-  }) 
+    ).subscribe(i => this.updateDataSource(i)) 
 }
 
+  updateDataSource(e: Element) {
+    let data = [];
+    for (const property in e) {
+      let key = `${property}`;
+      let value = `${e[property]}`;
+      let item = {key, value};
+      data.push(item);
+    }
+    this.dataSource.data = data;
+    this.dataSource.sort = this.sort;
+  }
 
   trainToElement(train:Train) {
-    let element: Element = { 
+    return { 
       operatorShortCode: train.operatorShortCode,
       operatorUICCode: train.operatorUICCode,
       trainNumber: train.trainNumber,
@@ -95,9 +89,7 @@ export class TrainDetailsComponent implements OnInit, AfterViewInit {
       runningCurrently: train.runningCurrently,
       timetableType: train.timetableType,
       trainCategory: train.trainCategory
-    }
-    console.log("element: ", element);
-    return element;
+    } as Element;
   }
 
 }
