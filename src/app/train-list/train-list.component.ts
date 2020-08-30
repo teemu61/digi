@@ -37,22 +37,24 @@ export class TrainListComponent implements OnInit, AfterViewInit{
       }
 
     ngOnInit(): void {
+      console.log("ngOnInit called")
 
       /* map Train to Element so that filtering is applied only selected columns */
       this.trainService.getTrains().pipe(
         map(trains => trains.map(i => {
+          console.log("i is: ",i)
           let element: Element = { 
             operatorShortCode: i.operatorShortCode,
             operatorUICCode: i.operatorUICCode,
             trainNumber: i.trainNumber,
             trainType: i.trainType
           }
+          console.log("element: ", element)
           return element;
         })))
         .subscribe(i => {
-        this.dataSource.data = i;
-        console.log("HUU this.dataSource: ",i)
-      })
+          this.dataSource.data = i;
+        })
     }
 
     searchTrains(search = '') {

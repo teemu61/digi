@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs/internal/operators';
+import { catchError, flatMap } from 'rxjs/internal/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -23,18 +23,21 @@ export class TrainService {
 
   getTrains(): Observable<any> {
     let url = BASE_URL + 'live-trains'
-    return this.http.get(url).pipe(
+    let ret = this.http.get(url).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );
+    ret.subscribe(i => console.log("ret: ",i))
+    return ret;
   }
 
   getTrainById(id: string): Observable<any> {
     let url = BASE_URL +'trains/latest/' + id;
-    return this.http.get(url).pipe(
-      map(this.extractData),
+    let ret = this.http.get(url).pipe(
+      flatMap(this.extractData),
       catchError(this.handleError)
     );
+    return ret;
   }
 
   private handleError(error: HttpErrorResponse): any {

@@ -2,7 +2,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Train } from '../model/Train';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TrainService } from '../train-service';
+import { TrainService } from '../service/train-service';
 import { TimeTableRow } from '../model/TimeTableRow';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -38,20 +38,21 @@ export class TrainDetailsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.trainService.getTrainById(this.route.snapshot.params.id).pipe(
-      map(trains => trains.map(i => {
+      map(train => {
         let element: Element = { 
-          operatorShortCode: i.operatorShortCode,
-          operatorUICCode: i.operatorUICCode,
-          trainNumber: i.trainNumber,
-          trainType: i.trainType
+          operatorShortCode: train.operatorShortCode,
+          operatorUICCode: train.operatorUICCode,
+          trainNumber: train.trainNumber,
+          trainType: train.trainType
         }
         return element;
-      })))
+      }))
       .subscribe(i => {
 
-      for (const property in i[0]) {
+      console.log("toinen i: ",i)
+      for (const property in i) {
         let key = `${property}`;
-        let value = `${i[0][property]}`;
+        let value = `${i[property]}`;
         let item = {key, value};
         this.dataSource.data.push(item);
       }
