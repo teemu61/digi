@@ -1,7 +1,7 @@
 import { Train } from '../model/Train';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TrainService } from '../train-service';
+import { TrainService } from '../service/train-service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DataSource } from '@angular/cdk/collections';

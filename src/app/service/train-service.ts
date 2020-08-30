@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/internal/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Train } from './model/Train';
+import { Train } from '../model/Train';
 
 const BASE_URL = 'https://rata.digitraffic.fi/api/v1/';
 
